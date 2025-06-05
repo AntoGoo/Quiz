@@ -17,6 +17,12 @@ class GameSessionsController < ApplicationController
 
   def show
     @game_session = GameSession.find(params[:id])
+
+    if @game_session.nil?
+      redirect_to root_path, alert: "Session de jeu introuvable."
+      return
+    end
+    
     @questions = @game_session.quiz.questions.order("RANDOM()").limit(@game_session.quiz.num_questions_per_game)
     #charge la première question du quiz
     @current_question = @questions.first

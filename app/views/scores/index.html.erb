@@ -16,6 +16,20 @@
       .score-card:hover {
         transform: scale(1.03);
       }
+
+      /* Taille différenciée selon le classement */
+      .first-place {
+        font-size: 2rem;
+        padding: 20px;
+      }
+      .second-third-place {
+        font-size: 1.5rem;
+        padding: 15px;
+      }
+      .other-places {
+        font-size: 1.2rem;
+        padding: 10px;
+      }
     </style>
   </head>
   <body>
@@ -27,11 +41,11 @@
 
       <div class="row justify-content-center">
         <% @players.each_with_index do |player, index| %>
-          <div class="col-md-6">
-            <div class="card score-card mb-3">
-              <div class="card-header bg-<%= index == 0 ? "success" : "primary" %> text-white">
+          <div class="col-md-<%= index == 0 ? "8" : index < 3 ? "6" : "4" %>">
+            <div class="card score-card mb-3 <%= index == 0 ? "first-place" : index < 3 ? "second-third-place" : "other-places" %>">
+              <div class="card-header bg-<%= index == 0 ? "success" : index < 3 ? "warning" : "primary" %> text-white">
                 <h3 class="mb-0">
-                  <%= index == 0 ? "🥇 " : "" %><%= player.pseudo %>
+                  <%= index == 0 ? "🥇 " : index == 1 ? "🥈 " : index == 2 ? "🥉 " : "" %><%= player.pseudo %>
                 </h3>
               </div>
               <div class="card-body">

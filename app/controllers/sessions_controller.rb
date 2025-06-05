@@ -1,4 +1,5 @@
 class SessionsController < ApplicationController
+  skip_before_action :verify_authenticity_token, only: [:destroy]
   def new
   end
 
@@ -12,6 +13,6 @@ class SessionsController < ApplicationController
   def destroy
     #session.delete(:user_id) # Supprime l'utilisateur de la session
     reset_session # Efface la session utilisateur
-    redirect_to root_path, notice: "Vous êtes déconnecté."
+    redirect_to root_path, method: :delete #notice: "Vous êtes déconnecté."
   end
 end
