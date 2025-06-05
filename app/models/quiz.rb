@@ -4,5 +4,5 @@ class Quiz < ApplicationRecord
   accepts_nested_attributes_for :questions, allow_destroy: true
   validates :title, presence: true
   validates :description, presence: true
-  #validates :num_questions_per_game, numericality: { only_integer: true, greater_than: 0 }
+  validates :num_questions, numericality: { only_integer: true, greater_than: 0 }
 end

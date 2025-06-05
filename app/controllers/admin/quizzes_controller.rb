@@ -8,16 +8,12 @@ module Admin
 
     def new
       @quiz = Quiz.new
-
-      # Création de 3 questions associées au quiz
-      3.times do
+      num_questions = params[:num_questions].to_i.nonzero? || 3 # Valeur par défaut si non spécifiée
+  
+      num_questions.times do
         question = @quiz.questions.build
-        8.times { question.options.build } # Chaque question aura 8 options
-      end
-      #@quiz = Quiz.new
-      #3.times { question = @quiz.questions.build; 4.times { question.options.build } }
-      #@quizzes = Quiz.all
-      #@quiz.questions.build
+        2.times { question.options.build } # Chaque question aura 8 options
+  end
     end
     
     def show
@@ -27,7 +23,7 @@ module Admin
     def create
       @quiz = Quiz.new(quiz_params)
       if @quiz.save
-        redirect_to login_path, notice: "Quiz créé avec succès"
+        redirect_to new_player_path, notice: "Quiz créé avec succès"
       else
         Rails.logger.debug "Erreurs du quiz : #{@quiz.errors.full_messages}"
         flash[:alert] = @quiz.errors.full_messages.join(", ")
@@ -61,7 +57,7 @@ module Admin
 
     def quiz_params
       Rails.logger.debug "Paramètres reçus : #{params.inspect}"
-      params.require(:quiz).permit(:title, :description, 
+      params.require(:quiz).permit(:title, :description, :num_questions, 
         questions_attributes: [:id, :content, :_destroy, options_attributes: [:id, :content, :correct, :_destroy]])
     end
 
