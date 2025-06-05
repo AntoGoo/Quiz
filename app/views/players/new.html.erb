@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Inscription Joueur</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container my-5">
+      <div class="text-center">
+        <h1 class="fw-bold">Bienvenue</h1>
+        <p class="text-muted">Entrez votre pseudo pour commencer</p>
+      </div>
+      
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card shadow p-4">
+            <%= form_with model: @player, url: players_path, local: true do |form| %>
+              <div class="mb-3">
+                <%= form.label :pseudo, "Votre Pseudo", class: "form-label" %>
+                <%= form.text_field :pseudo, class: "form-control", required: true %>
+              </div>
+
+              <div class="d-grid">
+                <%= form.submit "S'inscrire", class: "btn btn-success" %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

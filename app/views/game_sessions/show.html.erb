@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Session de Jeu</title>
+    <!-- Inclusion de Bootstrap 5 via CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      /* Quelques ajustements personnalisés supplémentaires */
+      body {
+        background-color: #f8f9fa;
+      }
+      .game-message {
+        font-size: 1.25rem;
+        color: #198754;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container my-5">
+      <!-- En-tête de la session -->
+      <div class="card shadow">
+        <div class="card-header text-center bg-primary text-white">
+          <h1>Session de Jeu : <%= @game_session.quiz.title %></h1>
+        </div>
+  
+        <div class="card-body">
+          <div id="game-message" class="mb-3 game-message"></div>
+  
+          <% if @current_question %>
+            <!-- Affichage de la question -->
+            <h2 class="mb-4"><%= @current_question.content %></h2>
+  
+            <!-- Liste des options -->
+            <div class="list-group">
+              <% @current_question.options.each do |option| %>
+                <%= button_to option.content,
+                      submit_answer_game_session_path(@game_session, option_id: option.id),
+                      method: :post,
+                      remote: true,
+                      data: { turbo: false },
+                      class: "list-group-item list-group-item-action btn btn-outline-primary text-start mb-2" %>
+              <% end %>
+            </div>
+          <% else %>
+            <div class="alert alert-info">Aucune question n'est disponible pour ce quiz.</div>
+          <% end %>
+        </div>
+  
+        <div class="card-footer text-center">
+          <% if @participation %>
+            <h3>Votre score : <span id="score-<%= current_user.id %>"><%= @participation.score || 0 %></span></h3>
+          <% else %>
+            <h3>Score non disponible</h3>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Inclusion de Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+    <!-- Votre code ActionCable -->
+    <script type="module">
+      import { createGameChannel } from "<%= asset_path 'channels/game_channel.js' %>";
+      const gameChannel = createGameChannel(<%= @game_session.id %>);
+  
+      // Exemple d'envoi d'une réponse via ActionCable ; cela pourrait être déclenché par un autre comportement
+      gameChannel.submitAnswer({ user_id: <%= current_user.id %>, answer_correct: true })
+        .then(() => {
+          window.location.href = "<%= game_session_path(@game_session) %>?notice=Score mis à jour !";
+        })
+        .catch((error) => console.error("Erreur lors de l'envoi de la réponse :", error));
+    </script>
+  </body>
+</html>

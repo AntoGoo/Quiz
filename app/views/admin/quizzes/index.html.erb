@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Gérer les Quiz</title>
+    <!-- Inclusion de Bootstrap 5 via CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+      .quiz-card {
+        transition: transform 0.2s;
+      }
+      .quiz-card:hover {
+        transform: scale(1.03);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container my-5">
+      <div class="text-center mb-4">
+        <h1 class="fw-bold">Gestion des Quiz</h1>
+        <p class="text-muted">Modifier ou supprimer les quiz existants.</p>
+      </div>
+
+      <div class="row">
+        <% @quizzes.each do |quiz| %>
+          <div class="col-md-6 col-lg-4">
+            <div class="card quiz-card shadow-sm mb-4">
+              <div class="card-header bg-warning text-dark">
+                <h3 class="mb-0"><%= quiz.title %></h3>
+              </div>
+              <div class="card-body">
+                <p class="text-muted"><%= quiz.description %></p>
+                <div class="d-flex justify-content-between">
+                  <%= link_to "Modifier", edit_admin_quiz_path(quiz), class: "btn btn-outline-warning" %>
+                  
+                  <!-- Formulaire POST pour la suppression -->
+                  <%= form_with url: admin_quiz_path(quiz), method: :delete, local: true do %>
+                    <button type="submit" class="btn btn-danger"
+                        data-confirm="Êtes-vous sûr de vouloir supprimer ce quiz ?">
+                      Supprimer
+                    </button>
+                  <% end %>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Inclusion du JS de Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

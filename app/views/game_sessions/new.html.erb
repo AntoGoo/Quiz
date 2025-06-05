@@ -1,0 +1,28 @@
+<h1>Session de Jeu: <%= @game_session.quiz.title %></h1>
+
+<div id="game-message"></div>
+
+<% if @current_question %>
+  <h2><%= @current_question.content %></h2>
+  <ul>
+    <% @current_question.options.each do |option| %>
+      <li>
+        <!-- Utilisation d'un bouton remote pour soumettre la réponse via AJAX -->
+        <%= button_to option.content, submit_answer_game_session_path(@game_session, option_id: option.id), method: :post, remote: true %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>Aucune question n'est disponible pour ce quiz.</p>
+<% end %>
+
+<div>
+  <h3>VoTre score: <span id="score-<%= @current_user.id %>">0</span></h3>
+</div>
+
+<script type="module">
+  import { createGameChannel } from "<%= asset_path 'channels/game_channel.js' %>";
+  const gameChannel = createGameChannel(<%= @game_session.id %>);
+  // Exemple d'envoi d'une réponse depuis le client :
+  gameChannel.submitAnswer({ user_id: <%= @current_user.id %>, answer_correct: true });
+</script>

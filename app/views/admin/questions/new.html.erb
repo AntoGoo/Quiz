@@ -1,0 +1,17 @@
+<h1>Ajouter une Question au Quiz: <%= @quiz.title %></h1>
+
+<%= form_with model: [@quiz, @question], local: true do |form| %>
+  <div>
+    <%= form.label :content, "Texte de la question" %>
+    <%= form.text_field :content %>
+  </div>
+  <div>
+    <%= form.label :num_questions_per_game, "Nombre de questions par session" %>
+    <%= form.number_field :num_questions_per_game, min: 1, max: @quiz.questions.size %>
+  </div>
+  <div>
+    <%= form.submit "Ajouter la question" %>
+  </div>
+<% end %>
+
+<%= link_to "Retour à la liste", admin_quiz_questions_path(@quiz) %>

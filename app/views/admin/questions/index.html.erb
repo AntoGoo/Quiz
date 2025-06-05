@@ -1,0 +1,16 @@
+<h1>Questions du Quiz: <%= @quiz.title %></h1>
+
+<%= link_to "Ajouter une nouvelle question", new_admin_quiz_question_path(@quiz) %>
+
+<ul>
+  <% @questions.each do |question| %>
+    <li>
+      <%= question.content %>
+      <%= link_to "Éditer", edit_admin_quiz_question_path(@quiz, question) %>
+      <%= link_to "Supprimer", admin_quiz_path(quiz), method: :delete, class: "btn btn-danger",
+          data: { confirm: "Êtes-vous sûr de vouloir supprimer ce quiz ?" } %>    
+    </li>
+  <% end %>
+</ul>
+
+<%= link_to "Retour aux quiz", admin_quizzes_path %>
